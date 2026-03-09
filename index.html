@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VoyageMath – Skills</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #fff; color: #1a1a1a; font-size: 14px; }
+
+    /* ── TOP NAV ── */
+    .top-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 52px;
+      border-bottom: 1px solid #e5e7eb;
+      background: #fff; position: sticky; top: 0; z-index: 200;
+    }
+    .nav-left { display: flex; align-items: center; gap: 8px; }
+    .nav-logo { font-size: 1.25rem; font-weight: 800; color: #6b21a8; letter-spacing: -0.5px; }
+    .trial-badge {
+      font-size: 10px; font-weight: 700; color: #6b7280;
+      border: 1.5px solid #d1d5db; border-radius: 4px;
+      padding: 1px 6px; letter-spacing: 0.5px;
+    }
+    .nav-center { display: flex; align-items: center; gap: 0; }
+    .nav-tab {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 20px; height: 52px; font-size: 14px; font-weight: 500;
+      color: #6b7280; text-decoration: none; border-bottom: 2px solid transparent;
+      transition: color 0.15s;
+    }
+    .nav-tab:hover { color: #1a1a1a; }
+    .nav-tab.active { color: #6b21a8; border-bottom-color: #6b21a8; font-weight: 600; }
+    .nav-tab svg { width: 16px; height: 16px; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .trial-text { font-size: 13px; color: #4b5563; }
+    .upgrade-btn {
+      font-size: 13px; font-weight: 600; color: #6b21a8;
+      border: 1.5px solid #6b21a8; border-radius: 20px;
+      padding: 5px 16px; background: #fff; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .upgrade-btn:hover { background: #f5f0ff; }
+    .admin-btn {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 13px; color: #4b5563; cursor: pointer;
+      background: none; border: none; font-weight: 500;
+    }
+    .admin-btn svg { width: 15px; height: 15px; }
+    .user-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; cursor: pointer; color: #4b5563;
+    }
+    .user-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #e5e7eb; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── BANNER ── */
+    .banner {
+      background: linear-gradient(135deg, #fdf4ff 0%, #f5f0ff 50%, #fef3ff 100%);
+      padding: 20px 40px;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid #e9d5ff;
+    }
+    /* confetti dots */
+    .banner::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle, #c084fc 1px, transparent 1px),
+        radial-gradient(circle, #a855f7 1px, transparent 1px),
+        radial-gradient(circle, #e879f9 1px, transparent 1px),
+        radial-gradient(circle, #818cf8 1px, transparent 1px);
+      background-size: 80px 80px, 120px 120px, 60px 60px, 100px 100px;
+      background-position: 10px 10px, 40px 50px, 70px 20px, 20px 60px;
+      opacity: 0.25; pointer-events: none;
+    }
+    .banner-inner {
+      display: flex; align-items: center; justify-content: center;
+      gap: 60px; position: relative;
+    }
+    .banner-title {
+      text-align: center; margin-bottom: 14px;
+      font-size: 16px; font-weight: 700; color: #1f2937;
+    }
+    .banner-title .emoji { margin-right: 6px; }
+    .banner-body { display: flex; align-items: flex-start; gap: 60px; justify-content: center; }
+    .banner-skill { text-align: center; }
+    .banner-skill-name { font-size: 14px; font-weight: 700; color: #1f2937; }
+    .banner-skill-sub { font-size: 13px; color: #6b7280; }
+    .banner-actions { display: flex; flex-direction: column; gap: 8px; }
+    .banner-action { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; }
+    .banner-action::before { content: '•'; color: #374151; }
+    .copy-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #5b21b6; color: #fff; font-size: 12px; font-weight: 600;
+      border: none; border-radius: 6px; padding: 5px 12px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: #4c1d95; }
+    .copy-btn svg { width: 13px; height: 13px; }
+    .report-link { color: #6b21a8; text-decoration: underline; cursor: pointer; }
+
+    /* ── SEARCH ROW ── */
+    .search-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px; border-bottom: 1px solid #e5e7eb; background: #fff;
+    }
+    .search-input-wrap { position: relative; width: 320px; }
+    .search-input-wrap svg {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      width: 15px; height: 15px; color: #9ca3af;
+    }
+    .search-input {
+      width: 100%; padding: 8px 12px 8px 36px;
+      border: 1.5px solid #d1d5db; border-radius: 24px;
+      font-size: 13.5px; color: #374151; background: #fff;
+      outline: none; transition: border-color 0.15s;
+    }
+    .search-input:focus { border-color: #a855f7; }
+    .search-input::placeholder { color: #9ca3af; }
+    .view-btns { display: flex; align-items: center; gap: 8px; }
+    .view-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; border-radius: 6px;
+      padding: 7px 16px; cursor: pointer; border: 1.5px solid transparent;
+      transition: background 0.15s;
+    }
+    .view-btn.active { background: #6b21a8; color: #fff; border-color: #6b21a8; }
+    .view-btn.inactive { background: #fff; color: #4b5563; border-color: #d1d5db; }
+    .view-btn.inactive:hover { background: #f9fafb; }
+    .view-btn svg { width: 14px; height: 14px; }
+
+    /* ── MAIN LAYOUT ── */
+    .main-layout { display: flex; min-height: calc(100vh - 160px); }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 180px; flex-shrink: 0; padding: 24px 12px; border-right: 1px solid #e5e7eb; }
+    .sidebar-item {
+      display: block; padding: 8px 14px; border-radius: 8px;
+      font-size: 14px; color: #374151; cursor: pointer;
+      margin-bottom: 2px; font-weight: 500;
+      transition: background 0.12s;
+    }
+    .sidebar-item:hover { background: #f5f0ff; color: #6b21a8; }
+    .sidebar-item.active { background: #6b21a8; color: #fff; font-weight: 600; }
+
+    /* ── CONTENT ── */
+    .content { flex: 1; padding: 20px 24px; overflow-x: auto; }
+
+    /* skills header card */
+    .skills-header-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 12px;
+      padding: 16px 20px; margin-bottom: 16px;
+    }
+    .skills-header-left { display: flex; align-items: center; gap: 14px; }
+    .skill-stack-icon { width: 48px; height: 48px; flex-shrink: 0; }
+    .skills-header-title { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+    .skill-chips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .skill-chip {
+      background: #f3f4f6; border: 1px solid #e5e7eb;
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 12.5px; color: #374151;
+    }
+    .skill-more { font-size: 12.5px; color: #6b7280; }
+    .see-all-btn {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 13px; color: #6b21a8; font-weight: 600;
+      background: none; border: none; cursor: pointer; white-space: nowrap;
+    }
+
+    /* skills grid */
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; margin-top: 8px;
+    }
+    .skill-col { padding: 0 16px; border-right: 1px solid #e5e7eb; }
+    .skill-col:first-child { padding-left: 0; }
+    .skill-col:last-child { border-right: none; }
+
+    .skill-section { margin-bottom: 24px; }
+    .skill-section-title {
+      font-size: 13.5px; font-weight: 700; color: #1f2937;
+      margin-bottom: 12px;
+    }
+    .skill-list { list-style: none; counter-reset: skill-counter; }
+    .skill-item {
+      counter-increment: skill-counter;
+      display: flex; align-items: flex-start; gap: 6px;
+      margin-bottom: 12px; font-size: 13px; color: #374151;
+      line-height: 1.45; cursor: pointer; position: relative;
+    }
+    .skill-item::before {
+      content: counter(skill-counter) ".";
+      flex-shrink: 0; color: #6b7280; font-size: 13px; min-width: 18px;
+    }
+    .skill-item:hover .skill-text { color: #6b21a8; text-decoration: underline; }
+    .skill-item.highlighted { position: relative; }
+    .skill-item.highlighted .skill-text {
+      color: #6b21a8; text-decoration: underline;
+    }
+
+    /* assign row */
+    .assign-row {
+      display: flex; align-items: center; gap: 6px; margin-top: 4px;
+    }
+    .assign-btn {
+      background: #fff; border: 1.5px solid #d1d5db; border-radius: 6px;
+      padding: 4px 12px; font-size: 12px; font-weight: 600;
+      color: #374151; cursor: pointer; transition: background 0.12s;
+    }
+    .assign-btn:hover { background: #f3f4f6; }
+    .plus-btn {
+      background: #fff; border: 1.5px solid #d1d5db; border-radius: 6px;
+      padding: 4px 8px; font-size: 13px; font-weight: 600;
+      color: #374151; cursor: pointer; transition: background 0.12s;
+    }
+
+    /* sample question card */
+    .sample-card {
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+      padding: 14px; margin-top: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .sample-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .sample-label { font-size: 12px; color: #6b7280; font-weight: 600; }
+    .diff-btns { display: flex; gap: 4px; }
+    .diff-btn {
+      width: 24px; height: 24px; border-radius: 4px; border: 1.5px solid #d1d5db;
+      font-size: 11px; font-weight: 700; color: #6b7280;
+      background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .diff-btn:first-child { background: #6b21a8; color: #fff; border-color: #6b21a8; }
+    .sample-q-text { font-size: 12.5px; color: #374151; margin-bottom: 10px; }
+    .math-eq {
+      font-size: 14px; color: #1f2937; margin-bottom: 12px;
+      font-style: italic; padding-left: 4px;
+    }
+    .answer-options { display: flex; gap: 16px; align-items: center; }
+    .answer-opt { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #374151; }
+    .correct-dot {
+      width: 18px; height: 18px; border-radius: 50%; background: #22c55e;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .correct-dot svg { width: 11px; height: 11px; color: #fff; }
+    .neutral-dot { width: 18px; height: 18px; border-radius: 50%; background: #e5e7eb; }
+    .scroll-bar {
+      width: 4px; background: #e5e7eb; border-radius: 4px;
+      height: 80px; margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="nav-logo">VoyageMath</span>
+      <span class="trial-badge">TRIAL</span>
+    </div>
+    <div class="nav-center">
+      <a href="#" class="nav-tab active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Skills
+      </a>
+      <a href="#" class="nav-tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Assignments
+      </a>
+      <a href="#" class="nav-tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Classes
+      </a>
+    </div>
+    <div class="nav-right">
+      <span class="trial-text">73 days left in trial</span>
+      <button class="upgrade-btn">Upgrade</button>
+      <button class="admin-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Admin controls
+      </button>
+      <button class="user-btn">
+        <div class="user-avatar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <div class="banner-title">
+      <span class="emoji">🎉</span> Congratulations on assigning your first skill!
+    </div>
+    <div class="banner-body">
+      <div class="banner-skill">
+        <div class="banner-skill-name">Dividing whole numbers by two-digit divisors</div>
+        <div class="banner-skill-sub">to 'Support Team'</div>
+      </div>
+      <div class="banner-actions">
+        <div class="banner-action">
+          Share with students directly&nbsp;
+          <button class="copy-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy join link
+          </button>
+        </div>
+        <div class="banner-action">
+          Find detailed join instructions in the assignment <span class="report-link">report</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH ROW -->
+  <div class="search-row">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" type="text" placeholder="Search for a topic, skill or standard"/>
+    </div>
+    <div class="view-btns">
+      <button class="view-btn active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Topics
+      </button>
+      <button class="view-btn inactive">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        Curriculum
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-item">Foundational</div>
+      <div class="sidebar-item">Grade 3</div>
+      <div class="sidebar-item">Grade 4</div>
+      <div class="sidebar-item">Grade 5</div>
+      <div class="sidebar-item active">Grade 6</div>
+      <div class="sidebar-item">Grade 7</div>
+      <div class="sidebar-item">Grade 8</div>
+      <div class="sidebar-item">Algebra 1</div>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- Skills header card -->
+      <div class="skills-header-card">
+        <div class="skills-header-left">
+          <!-- Stacked layers icon -->
+          <svg class="skill-stack-icon" viewBox="0 0 48 48" fill="none">
+            <ellipse cx="24" cy="38" rx="18" ry="5" fill="#86efac" opacity="0.6"/>
+            <rect x="8" y="28" width="32" height="10" rx="5" fill="#4ade80"/>
+            <rect x="8" y="18" width="32" height="10" rx="5" fill="#22c55e"/>
+            <rect x="8" y="10" width="32" height="10" rx="5" fill="#16a34a"/>
+          </svg>
+          <div>
+            <div class="skills-header-title">Foundational practice skills for Grade 6 readiness</div>
+            <div class="skill-chips">
+              <span class="skill-chip">Order of operations (including two sets of parentheses)</span>
+              <span class="skill-chip">Writing fractions in their simplest form</span>
+              <span class="skill-more">+ 56 more skills</span>
+            </div>
+          </div>
+        </div>
+        <button class="see-all-btn">
+          See all (58)
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+
+      <!-- Skills grid -->
+      <div class="skills-grid">
+
+        <!-- COL 1 -->
+        <div class="skill-col">
+          <div class="skill-section">
+            <div class="skill-section-title">Operations on whole numbers</div>
+            <ul class="skill-list">
+              <li class="skill-item"><span class="skill-text">Dividing whole numbers by two-digit divisors</span></li>
+            </ul>
+          </div>
+          <div class="skill-section">
+            <div class="skill-section-title">Factors and multiples</div>
+            <ul class="skill-list">
+              <li class="skill-item"><span class="skill-text">Express composite whole numbers as a product of prime factors with natural number exponents</span></li>
+              <li class="skill-item"><span class="skill-text">Solving mathematical problems on GCF/GCD/HCF</span></li>
+              <li class="skill-item"><span class="skill-text">Solving mathematical problems on LCM</span></li>
+              <li class="skill-item"><span class="skill-text">Using the distributive property to express a sum of two whole numbers with a common factor</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- COL 2 -->
+        <div class="skill-col">
+          <div class="skill-section">
+            <div class="skill-section-title">Operations on decimal numbers</div>
+            <ul class="skill-list">
+              <li class="skill-item"><span class="skill-text">Adding decimal numbers</span></li>
+              <li class="skill-item"><span class="skill-text">Subtracting decimal numbers</span></li>
+              <li class="skill-item"><span class="skill-text">Solving problems involving adding and/or subtracting decimal numbers</span></li>
+              <li class="skill-item"><span class="skill-text">Multiplying decimal numbers</span></li>
+              <li class="skill-item"><span class="skill-text">Dividing decimal numbers</span></li>
+              <li class="skill-item"><span class="skill-text">Solving problems involving multiplying and/or dividing decimal numbers</span></li>
+              <li class="skill-item"><span class="skill-text">Solving problems involving mixed operations on decimal numbers</span></li>
+            </ul>
+          </div>
+          <div class="skill-section">
+            <div class="skill-section-title">Operations on rational numbers</div>
+          </div>
+        </div>
+
+        <!-- COL 3 -->
+        <div class="skill-col">
+          <div class="skill-section">
+            <div class="skill-section-title">Linear equations (one variable)</div>
+            <ul class="skill-list">
+              <li class="skill-item"><span class="skill-text">Using substitution to determine whether a given number makes an equation true</span></li>
+              <li class="skill-item"><span class="skill-text">Solving problems to determine the unknown decimals in an equation</span></li>
+              <li class="skill-item highlighted">
+                <span class="skill-text">Solving problems to determine the unknown fractions in an equation</span>
+                <div class="assign-row">
+                  <button class="assign-btn">Assign</button>
+                  <button class="plus-btn">+</button>
+                </div>
+                <!-- Sample question card -->
+                <div class="sample-card">
+                  <div class="sample-card-header">
+                    <span class="sample-label">Sample question</span>
+                    <div class="diff-btns">
+                      <button class="diff-btn">E</button>
+                      <button class="diff-btn">M</button>
+                      <button class="diff-btn">H</button>
+                    </div>
+                  </div>
+                  <div class="sample-q-text">Determine the value of s in the equation:</div>
+                  <div class="math-eq">s + ¹⁄₉ = ³⁄₉</div>
+                  <div class="answer-options">
+                    <div class="answer-opt">
+                      <div class="correct-dot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                      </div>
+                      <span>²⁄₉</span>
+                    </div>
+                    <div class="answer-opt">
+                      <div class="neutral-dot"></div>
+                      <span>⁴⁄₉</span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="skill-item"><span class="skill-text">Write one-variable, one-step equations to represent constraints or conditions within problems</span></li>
+              <li class="skill-item"><span class="skill-text">Solving problems with equations (x + p = q form)</span></li>
+              <li class="skill-item"><span class="skill-text">Solving problems with equations (px = q form)</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- COL 4 -->
+        <div class="skill-col">
+          <div class="skill-section">
+            <div class="skill-section-title">Frequency distributions (including plots)</div>
+            <ul class="skill-list">
+              <li class="skill-item"><span class="skill-text">Summarize categorical data with mode and describe the distribution</span></li>
+              <li class="skill-item"><span class="skill-text">Summarize categorical data with percent of values in each category and describe the distribution</span></li>
+              <li class="skill-item"><span class="skill-text">Distinguish between situations that yield data with and without variability</span></li>
+              <li class="skill-item"><span class="skill-text">Calculating mode</span></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FRESHWORKS CHATBOT — loads naturally as bottom-right bubble -->
+  <script
+    src='https://fw-cdn.com/13830892/5777512.js'
+    chat='true'
+    widgetId='8074986f-bcf1-47a8-b183-e7a3b9d8ce9e'>
+  </script>
+
+</body>
+</html>
